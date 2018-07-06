@@ -1,6 +1,7 @@
 # web
-[springboot 创建父子工程、聚合工程:]  
-博客地址：
+[springboot创建父子工程、聚合工程及问题解决](http://blog.51cto.com/wyait/2137112)  
+
+博客地址：[http://blog.51cto.com/wyait/2137112](http://blog.51cto.com/wyait/2137112)
 
 开发工具：IntellJ IDEA 2017  
 
