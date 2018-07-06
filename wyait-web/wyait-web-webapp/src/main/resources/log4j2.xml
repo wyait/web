@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <!-- 缺省配置（用于开发环境），配置日志文件输出目录和动态参数。其他环境需要在VM参数中指定； “sys:”表示：如果VM参数中没指定这个变量值，则使用本文件中定义的缺省全局变量值 -->
+        <Property name="instance">wyait-web</Property>
+        <Property name="log.dir">D:\log\logs</Property>
+    </Properties>
+    <!-- 定义所有的appender -->
+    <Appenders>
+
+        <!--这个输出控制台的配置 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+            <!--输出日志的格式 -->
+            <PatternLayout
+                    pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n"/>
+        </Console>
+        <RollingRandomAccessFile name="infoLog"
+                                 fileName="${log.dir}/${instance}-info.log"
+                                 filePattern="${log.dir}/%d{yyyy-MM}/${instance}-info-%d{yyyy-MM-dd}-%i.log.gz"
+                                 append="true">
+            <PatternLayout
+                    pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n"/>
+            <Filters>
+                <ThresholdFilter level="info" onMatch="ACCEPT"
+                                 onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <!-- 基于时间的滚动策略，interval属性用来指定多久滚动一次，默认是1 hour -->
+                <TimeBasedTriggeringPolicy interval="1"
+                                           modulate="true"/>
+                <!-- 基于指定文件大小的滚动策略，size属性用来定义每个日志文件的大小 -->
+                <SizeBasedTriggeringPolicy size="1024MB"/>
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${log.dir}" maxDepth="2">
+                    <IfFileName glob="*/wyait-*.log.gz"/>
+                    <IfLastModified age="90D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <!-- error级别的日志信息 -->
+        <RollingRandomAccessFile name="errorLog"
+                                 fileName="${log.dir}/${instance}-error.log"
+                                 filePattern="${log.dir}/%d{yyyy-MM}/${instance}-error-%d{yyyy-MM-dd}-%i.log.gz"
+                                 append="true">
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT"
+                                 onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout
+                    pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"
+                                           modulate="true"/>
+                <SizeBasedTriggeringPolicy size="1024MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <!-- 全局配置，默认所有的Logger都继承此配置 -->
+    <Loggers> <!-- 第三方的软件日志级别 -->
+        <logger name="org.springframework" level="info" additivity="true">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="infoLog"/>
+            <AppenderRef ref="errorLog"/>
+        </logger>
+        <logger name="java.sql.PreparedStatement" level="debug"
+                additivity="true">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="infoLog"/>
+        </logger>
+        <!-- root logger 配置 -->
+        <Root level="debug" includeLocation="true">
+            <AppenderRef ref="infoLog"/>
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="errorLog"/>
+        </Root>
+        <!-- AsyncRoot - 异步记录日志 - 需要LMAX Disruptor的支持 -->
+        <!-- <AsyncRoot level="info" additivity="false"> <AppenderRef ref="Console"
+            /> <AppenderRef ref="infoLog" /> <AppenderRef ref="errorLog" /> </AsyncRoot> -->
+    </Loggers>
+</Configuration>
+

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.wyait.parent</groupId>
+    <artifactId>wyait-parent</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging><!--父模块打包类型必须为pom-->
+
+    <properties>
+        <!--依赖版本号管理-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8
+        </project.reporting.outputEncoding>
+        <java.version>1.7</java.version>
+        <!--spring依赖版本控制（和spring-boot-parent版本保持一致）-->
+        <springframework.version>4.3.13.RELEASE</springframework.version>
+        <!--spring-boot-parent版本号，通过spring-boot管理其他第三方依赖版本-->
+        <spring.boot.version>1.5.9.RELEASE</spring.boot.version>
+        <mybatis.version>1.3.1</mybatis.version>
+        <druid.version>1.1.5</druid.version>
+        <pagehelper.version>1.2.3</pagehelper.version>
+        <commons.lang3.version>3.6</commons.lang3.version>
+        <commons.io.version>2.5</commons.io.version>
+        <oval.version>1.86</oval.version>
+    </properties>
+    <!--管理依赖jar包-->
+    <dependencyManagement>
+        <dependencies>
+            <!-- 统一管理Spring依赖 -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${springframework.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                        <groupId>org.springframework.boot</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <!-- druid连接池 -->
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!-- httpclient -->
+            <dependency>
+                <!-- pageHelper分页插件 -->
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+
+            <!-- Apache工具组件 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons.lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+            <!-- oval 参数校验 -->
+            <dependency>
+                <groupId>net.sf.oval</groupId>
+                <artifactId>oval</artifactId>
+                <version>${oval.version}</version>
+            </dependency>
+            <!--<dependency>
+                &lt;!&ndash; springboot内置tomcat，也可注释 &ndash;&gt;
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-tomcat</artifactId>
+                <scope>provided</scope>
+            </dependency>-->
+        </dependencies>
+    </dependencyManagement>
+
+    <!--统一插件配置版本管理 TODO-->
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <!--指定编译时的jdk版本-->
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
