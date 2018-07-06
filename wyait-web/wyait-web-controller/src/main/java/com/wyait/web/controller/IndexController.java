@@ -15,8 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 /**
- * @项目名称：midd-web
- * @包名：com.midd.web.controller
+ * @项目名称：wyait-web
+ * @包名：com.wyait.web.controller
  * @类描述：
  * @创建人：wyait
  * @创建时间：2018-06-19 14:32
